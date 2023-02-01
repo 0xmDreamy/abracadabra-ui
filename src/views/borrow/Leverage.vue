@@ -208,6 +208,8 @@ import {
 } from "@/utils/approveHelpers.js";
 import notification from "@/helpers/notification/notification.js";
 
+import { getGlpFee } from "@/helpers/glpFee";
+
 export default {
   mixins: [cauldronsMixin, cookMixin],
 
@@ -716,6 +718,10 @@ export default {
 
       return false;
     },
+    // async collateralExpected(value) {
+    //   console.log("here")
+    //   await this.fetchGlpFee(value)
+    // }
   },
 
   methods: {
@@ -1142,6 +1148,21 @@ export default {
       this.clearData();
       this.useCheckBox = !this.useCheckBox;
     },
+
+    async fetchGlpFee() {
+      if(this.isFeeFetching) return false;
+
+      const parsedAmount = this.$ethers.utils.parseUnits(
+        Vue.filter("formatToFixed")(
+          1000000000,
+          18
+        )
+      );
+      console.log("parsedAmount",parsedAmount.toString())
+      this.isFeeFetching = true;
+      await getGlpFee(parsedAmount)
+      this.isFeeFetching = false
+    }
   },
 
   async created() {

@@ -10,7 +10,7 @@ const {
   MAX_PRICE_DEVIATION_BASIS_POINTS,
   DEFAULT_MAX_USDG_AMOUNT
 } = require("./constants");
-const { providers, Contract, Wallet, BigNumber } = require("ethers");
+const { providers, Contract, Wallet } = require("ethers");
 const bigNumberify = require("./utils/big-numberify");
 const expandDecimals = require("./utils/expand-decimals");
 const { default: axios } = require("axios");
@@ -215,21 +215,29 @@ function setTokenUsingIndexPrices(token, indexPrices, nativeTokenAddress) {
     .div(BASIS_POINTS_DIVISOR);
 }
 
-async function bootstrap() {
+
+let vaultTokenInfo = null;
+
+async function getGlpFee(glpAmount) {
   const isBuying = true;
   const account = Wallet.createRandom().address;
   const tokenAddresses = tokens.map((token) => token.address);
 
   const tokenBalances = await reader.getTokenBalances(account, tokenAddresses);
   console.log("1: tokenBalances");
-  const vaultTokenInfo = await vaultReader.getVaultTokenInfoV4(
-    "0x489ee077994B6658eAfA855C308275EAd8097C4A",
-    "0xb87a436B93fFE9D75c5cFA7bAcFff96430b09868",
-    "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-    expandDecimals(1, 18),
-    tokenAddresses
-  );
+
+  if(!vaultTokenInfo) {
+    vaultTokenInfo = await vaultReader.getVaultTokenInfoV4(
+      "0x489ee077994B6658eAfA855C308275EAd8097C4A",
+      "0xb87a436B93fFE9D75c5cFA7bAcFff96430b09868",
+      "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+      expandDecimals(1, 18),
+      tokenAddresses
+    );
+  }
+
   console.log("2: vaultTokenInfo");
+  
   const { data: indexPrices } = await axios.get(
     "https://gmx-server-mainnet.uw.r.appspot.com/prices"
   );
@@ -246,7 +254,7 @@ async function bootstrap() {
     "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1"
   );
 
-  const glpAmount = BigNumber.from("10000000000000000000"); // 10 GLP
+  // const glpAmount = BigNumber.from("10000000000000000000"); // 10 GLP
 
   const aums = await glpManager.getAums();
   console.log("4: aums");
@@ -306,6 +314,4 @@ async function bootstrap() {
   }
 }
 
-// bootstrap();
-
-export { bootstrap };
+export { getGlpFee };
