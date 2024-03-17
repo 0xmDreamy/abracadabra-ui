@@ -13,7 +13,7 @@
         class="action"
         :stakeInfo="stakeInfo"
         :actionActiveTab="actionActiveTab"
-        :userPointsEarned="userPointsEarned"
+        :userPointsEarned="userPointsStatistics?.total"
         :mobileMode="mobileMode"
         @updateStakeInfo="createStakeInfo"
         v-if="isActionTab"
@@ -48,7 +48,7 @@ export default {
     return {
       stakeInfo: null as any,
       updateInterval: null as any,
-      userPointsEarned: 0 as any,
+      userPointsStatistics: null as any,
       pointsStatistics: null as any,
       actionActiveTab: "Stake",
       currentMobileTab: 0,
@@ -84,7 +84,7 @@ export default {
 
     async createStakeInfo() {
       this.stakeInfo = await getStakeInfo(this.account);
-      this.userPointsEarned = await fetchUserPointsStatistics(this.account);
+      this.userPointsStatistics = await fetchUserPointsStatistics(this.account);
       this.pointsStatistics = await fetchPointsStatistics();
     },
 

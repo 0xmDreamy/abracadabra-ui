@@ -8,7 +8,7 @@
 
       <div class="statistics-wrap">
         <div class="statistics-cards">
-          <PointsEarnedCard :userPointsEarned="userPointsEarned" />
+          <PointsEarnedCard :userPointsEarned="userPointsStatistics?.total" />
 
           <UserDeposits
             :stakeInfo="stakeInfo"
@@ -68,7 +68,7 @@ export default {
     return {
       stakeInfo: null,
       updateInterval: null,
-      userPointsEarned: 0,
+      userPointsStatistics: null,
       pointsStatistics: null,
       isFounderPopupOpened: false,
     };
@@ -81,7 +81,7 @@ export default {
     }),
 
     totalDistributedPoints() {
-      return this.formatAmount(this.pointsStatistics?.distributionAmountSum);
+      return this.formatAmount(this.pointsStatistics?.total);
     },
   },
 
@@ -96,7 +96,7 @@ export default {
 
     async createStakeInfo() {
       this.stakeInfo = await getStakeInfo(this.account);
-      this.userPointsEarned = await fetchUserPointsStatistics(this.account);
+      this.userPointsStatistics = await fetchUserPointsStatistics(this.account);
       this.pointsStatistics = await fetchPointsStatistics();
     },
   },

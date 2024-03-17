@@ -32,7 +32,7 @@
         /> -->
       </h3>
       <div class="value">
-        {{ formatAmount(pointsStatistics?.distributionAmountSum) }}
+        {{ formatAmount(pointsStatistics?.total) }}
       </div>
     </div>
   </div>
