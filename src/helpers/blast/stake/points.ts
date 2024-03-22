@@ -22,8 +22,8 @@ export const fetchPointsStatistics = async () => {
         pendingDistributionAmountSumFromDepositBorrowedMimLle: pendingDistributionAmountSumByReason(reason: "lle_deposit_borrowed_mim")
         distributionAmountSumFromMimUsdbLpUnlocked: distributionAmountSumByReason(reason: "deposit_mim_usdb_lp")
         pendingDistributionAmountSumFromMimUsdbLpUnlocked: pendingDistributionAmountSumByReason(reason: "deposit_mim_usdb_lp")
-        distributionAmountSumFromMimUsdbLpLocked: distributionAmountSumByReason(reason: "lock_mim_usdb_lp")
-        pendingDistributionAmountSumFromMimUsdbLpLocked: pendingDistributionAmountSumByReason(reason: "lock_mim_usdb_lp")
+        distributionAmountSumFromFounder: distributionAmountSumByReason(reason: "founder")
+        pendingDistributionAmountSumFromFounder: pendingDistributionAmountSumByReason(reason: "founder")
       }`;
 
     const { data: { data } } = await axios.post(GRAPHQL, { query });
@@ -32,23 +32,19 @@ export const fetchPointsStatistics = async () => {
       "distributionAmountSumFromUsdbUnlockedLle",
       "distributionAmountSumFromMimUnlockedLle",
       "distributionAmountSumFromDepositBorrowedMimLle",
-      "distributionAmountSumFromMimUsdbLpUnlocked",
     ];
     const pendingLleUnlockedKeys = [
       "pendingDistributionAmountSumFromUsdbUnlockedLle",
       "pendingDistributionAmountSumFromMimUnlockedLle",
       "pendingDistributionAmountSumFromDepositBorrowedMimLle",
-      "pendingDistributionAmountSumFromMimUsdbLpUnlocked",
     ];
     const lleLockedKeys = [
       "distributionAmountSumFromUsdbLockedLle",
       "distributionAmountSumFromMimLockedLle",
-      "distributionAmountSumFromMimUsdbLpLocked",
     ];
     const pendingLleLockedKeys = [
       "pendingDistributionAmountSumFromUsdbLockedLle",
       "pendingDistributionAmountSumFromMimLockedLle",
-      "pendingDistributionAmountSumFromMimUsdbLpLocked",
     ];
 
     const unlocked = lleUnlockedKeys.map((key) => Number(data[key])).reduce((a, b) => a + b, 0);
@@ -65,6 +61,10 @@ export const fetchPointsStatistics = async () => {
       pendingLocked,
       cauldron: Number(data.distributionAmountSumFromCauldron),
       pendingCauldron: Number(data.pendingDistributionAmountSumFromCauldron),
+      lp: Number(data.distributionAmountSumFromMimUsdbLpUnlocked),
+      pendingLp: Number(data.pendingDistributionAmountSumFromMimUsdbLpUnlocked),
+      founder: Number(data.distributionAmountSumFromFounder),
+      pendingFounder: Number(data.pendingDistributionAmountSumFromFounder),
     };
   } catch (error) {
     console.log("Error fetching points statistics", error);
@@ -77,6 +77,10 @@ export const fetchPointsStatistics = async () => {
       pendingLocked: 0,
       cauldron: 0,
       pendingCauldron: 0,
+      lp: 0,
+      pendingLp: 0,
+      founder: 0,
+      pendingFounder: 0,
     };
   }
 };
@@ -93,6 +97,10 @@ export const fetchUserPointsStatistics = async (
     pendingLocked: 0,
     cauldron: 0,
     pendingCauldron: 0,
+    lp: 0,
+    pendingLp: 0,
+    founder: 0,
+    pendingFounder: 0,
   };
 
   try {
@@ -113,8 +121,8 @@ export const fetchUserPointsStatistics = async (
         pendingDistributionAmountSumByAddressFromDepositBorrowedMimLle: pendingDistributionAmountSumByAddressByReason(address: "${address.toLowerCase()}", reason: "lle_deposit_borrowed_mim")
         distributionAmountSumByAddressFromMimUsdbLpUnlocked: distributionAmountSumByAddressByReason(address: "${address.toLowerCase()}", reason: "deposit_mim_usdb_lp")
         pendingDistributionAmountSumByAddressFromMimUsdbLpUnlocked: pendingDistributionAmountSumByAddressByReason(address: "${address.toLowerCase()}", reason: "deposit_mim_usdb_lp")
-        distributionAmountSumByAddressFromMimUsdbLpLocked: distributionAmountSumByAddressByReason(address: "${address.toLowerCase()}", reason: "lock_mim_usdb_lp")
-        pendingDistributionAmountSumByAddressFromMimUsdbLpLocked: pendingDistributionAmountSumByAddressByReason(address: "${address.toLowerCase()}", reason: "lock_mim_usdb_lp")
+        distributionAmountSumByAddressFromFounder: distributionAmountSumByAddressByReason(address: "${address.toLowerCase()}", reason: "founder")
+        pendingDistributionAmountSumByAddressFromFounder: pendingDistributionAmountSumByAddressByReason(address: "${address.toLowerCase()}", reason: "founder")
       }`;
 
     const { data: { data } } = await axios.post(GRAPHQL, { query });
@@ -123,23 +131,19 @@ export const fetchUserPointsStatistics = async (
       "distributionAmountSumByAddressFromUsdbUnlockedLle",
       "distributionAmountSumByAddressFromMimUnlockedLle",
       "distributionAmountSumByAddressFromDepositBorrowedMimLle",
-      "distributionAmountSumByAddressFromMimUsdbLpUnlocked",
     ];
     const pendingLleUnlockedKeys = [
       "pendingDistributionAmountSumByAddressFromUsdbUnlockedLle",
       "pendingDistributionAmountSumByAddressFromMimUnlockedLle",
       "pendingDistributionAmountSumByAddressFromDepositBorrowedMimLle",
-      "pendingDistributionAmountSumByAddressFromMimUsdbLpUnlocked",
     ];
     const lleLockedKeys = [
       "distributionAmountSumByAddressFromUsdbLockedLle",
       "distributionAmountSumByAddressFromMimLockedLle",
-      "distributionAmountSumByAddressFromMimUsdbLpLocked",
     ];
     const pendingLleLockedKeys = [
       "pendingDistributionAmountSumByAddressFromUsdbLockedLle",
       "pendingDistributionAmountSumByAddressFromMimLockedLle",
-      "pendingDistributionAmountSumByAddressFromMimUsdbLpLocked",
     ];
 
 
@@ -157,6 +161,10 @@ export const fetchUserPointsStatistics = async (
       pendingLocked,
       cauldron: Number(data.distributionAmountSumByAddressFromCauldron),
       pendingCauldron: Number(data.pendingDistributionAmountSumByAddressFromCauldron),
+      lp: Number(data.distributionAmountSumByAddressFromMimUsdbLpUnlocked),
+      pendingLp: Number(data.pendingDistributionAmountSumByAddressFromMimUsdbLpUnlocked),
+      founder: Number(data.distributionAmountSumByAddressFromFounder),
+      pendingFounder: Number(data.pendingDistributionAmountSumByAddressFromFounder),
     }
   } catch (error) {
     console.log("Error fetching user points statistics", error);
@@ -169,6 +177,10 @@ export const fetchUserPointsStatistics = async (
       pendingLocked: 0,
       cauldron: 0,
       pendingCauldron: 0,
+      lp: 0,
+      pendingLp: 0,
+      founder: 0,
+      pendingFounder: 0,
     };
   }
 };
